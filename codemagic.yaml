@@ -1,0 +1,61 @@
+workflows:
+  android-release-build:
+    name: Instagram Offline-First Clone Production Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      android_ndk: 25.2.9519653
+      java: 17
+      groups:
+        - supabase_credentials
+    triggering:
+      events:
+        - push
+      branches:
+        - main
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      
+      - name: Install and Setup FVM
+        script: |
+          dart pub global activate fvm
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          fvm install 3.35.7 --setup
+          fvm use 3.35.7
+          
+      - name: Make Scripts Executable
+        script: |
+          chmod +x scripts/get_all.sh
+          chmod +x scripts/build_runner.sh
+          
+      - name: Install All Multi-Package Dependencies
+        script: |
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          ./scripts/get_all.sh
+          
+      - name: Run Build Runner for Packages & Root
+        script: |
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          ./scripts/build_runner.sh shared clean
+          ./scripts/build_runner.sh shared
+          
+          ./scripts/build_runner.sh insta_blocks clean
+          ./scripts/build_runner.sh insta_blocks
+          
+          fvm dart run build_runner clean
+          fvm dart run build_runner build --delete-conflicting-outputs
+          
+      - name: Generate Localizations
+        script: |
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          fvm flutter gen-l10n
+          
+      - name: Build Android APK (Release Mode)
+        script: |
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          fvm flutter build apk --release --flavor production
+          
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
