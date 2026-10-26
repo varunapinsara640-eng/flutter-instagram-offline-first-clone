@@ -7,8 +7,6 @@ workflows:
       vars:
         ANDROID_NDK: "25.2.9519653"
       java: 17
-      groups:
-        - supabase_credentials
     triggering:
       events:
         - push
@@ -33,8 +31,8 @@ workflows:
       - name: Setup Environment Variables
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
-          # Dummy values භාවිත කරමින් පරිසර ගොනු සකස් කිරීම
-          ./scripts/setup_env.sh dummy dummy dummy dummy dummy dummy
+          # Group එකක් නැති නිසා කෙලින්ම Variables 4 ඇප් එකට ලබා දීම
+          ./scripts/setup_env.sh "$SUPABASE_URL" "$SUPABASE_ANON_KEY" "$POWERSYNC_URL" "$GOOGLE_MAPS_API_KEY" "dummy" "dummy"
           
       - name: Install All Multi-Package Dependencies
         script: |
@@ -50,7 +48,6 @@ workflows:
           ./scripts/build_runner.sh insta_blocks clean
           ./scripts/build_runner.sh insta_blocks
           
-          # Env package එක සඳහාද build runner ධාවනය කිරීම
           cd packages/env && fvm dart run build_runner build --delete-conflicting-outputs && cd ../..
           
           fvm dart run build_runner clean
