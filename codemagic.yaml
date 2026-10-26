@@ -54,7 +54,7 @@ workflows:
       - name: Build Android APK (Release Mode)
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
-          fvm flutter build apk --release --flavor production
+          fvm flutter build apk --release --flavor production -t lib/main_production.dart
           
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
