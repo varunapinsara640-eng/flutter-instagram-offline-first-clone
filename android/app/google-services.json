@@ -7,6 +7,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:675823091852:android:2b9e6c58b71a5cc194bba9",
+        "android_client_info": {
+          "package_name": "com.itsezlife.instagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675823091852-frh9qcr24c18m4t7kkbq3k6gnopo1had.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZoWNOT4lHVrJ0X2gOFDEk55tX3IMFwi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675823091852-frh9qcr24c18m4t7kkbq3k6gnopo1had.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:675823091852:android:a1b8c3119b34413594bba9",
         "android_client_info": {
           "package_name": "com.thealphamerc.flutter_twitter_clone"
