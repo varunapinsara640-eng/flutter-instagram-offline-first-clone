@@ -1,0 +1,17 @@
+{
+  "project_info": {
+    "project_number": "123456789012",
+    "project_id": "dummy-instagram-clone"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789012:android:123456789012",
+        "android_client_info": {
+          "package_name": "com.itsezlife.instagram"
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
