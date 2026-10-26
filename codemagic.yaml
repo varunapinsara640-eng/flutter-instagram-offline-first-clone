@@ -28,6 +28,13 @@ workflows:
         script: |
           chmod +x scripts/get_all.sh
           chmod +x scripts/build_runner.sh
+          chmod +x scripts/setup_env.sh
+          
+      - name: Setup Environment Variables
+        script: |
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          # Dummy values භාවිත කරමින් පරිසර ගොනු සකස් කිරීම
+          ./scripts/setup_env.sh dummy dummy dummy dummy dummy dummy
           
       - name: Install All Multi-Package Dependencies
         script: |
@@ -42,6 +49,9 @@ workflows:
           
           ./scripts/build_runner.sh insta_blocks clean
           ./scripts/build_runner.sh insta_blocks
+          
+          # Env package එක සඳහාද build runner ධාවනය කිරීම
+          cd packages/env && fvm dart run build_runner build --delete-conflicting-outputs && cd ../..
           
           fvm dart run build_runner clean
           fvm dart run build_runner build --delete-conflicting-outputs
