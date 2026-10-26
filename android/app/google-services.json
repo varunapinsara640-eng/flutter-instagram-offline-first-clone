@@ -1,14 +1,36 @@
 {
   "project_info": {
-    "project_number": "123456789012",
-    "project_id": "dummy-instagram-clone"
+    "project_number": "675823091852",
+    "project_id": "lankamart-b4ca9",
+    "storage_bucket": "lankamart-b4ca9.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:123456789012",
+        "mobilesdk_app_id": "1:675823091852:android:a1b8c3119b34413594bba9",
         "android_client_info": {
-          "package_name": "com.itsezlife.instagram"
+          "package_name": "com.thealphamerc.flutter_twitter_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "675823091852-frh9qcr24c18m4t7kkbq3k6gnopo1had.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZoWNOT4lHVrJ0X2gOFDEk55tX3IMFwi8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "675823091852-frh9qcr24c18m4t7kkbq3k6gnopo1had.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
