@@ -4,15 +4,14 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
-      android_ndk: 25.2.9519653
+      vars:
+        ANDROID_NDK: "25.2.9519653"
       java: 17
       groups:
         - supabase_credentials
     triggering:
       events:
         - push
-      branches:
-        - main
     scripts:
       - name: Set Android SDK location
         script: |
