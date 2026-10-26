@@ -33,8 +33,17 @@ workflows:
       - name: Setup Environment Variables
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
-          # Codemagic Dashboard එකෙන් ලබාදුන් සැබෑ දත්ත ඇප් එක තුළට සම්බන්ධ කිරීම
-          ./scripts/setup_env.sh "$SUPABASE_URL" "$SUPABASE_ANON_KEY" "$POWERSYNC_URL" "$GOOGLE_MAPS_API_KEY" "dummy" "dummy"
+          # Codemagic Dashboard එකෙන් ලබාදුන් සැබෑ දත්ත 7ම ඇප් එකේ .env ගොනුවට නිවැරදිව සම්බන්ධ කිරීම
+          cd packages/env
+          echo "SUPABASE_URL=$SUPABASE_URL" > .env
+          echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
+          echo "POWERSYNC_URL=$POWERSYNC_URL" >> .env
+          echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> .env
+          echo "FCM_SERVER_KEY=$FCM_SERVER_KEY" >> .env
+          echo "FIREBASE_SERVICE_ACCOUNT=$FIREBASE_SERVICE_ACCOUNT" >> .env
+          echo "WEB_CLIENT_ID=$WEB_CLIENT_ID" >> .env
+          echo "IOS_CLIENT_ID=$IOS_CLIENT_ID" >> .env
+          cd ../..
           
       - name: Install All Multi-Package Dependencies
         script: |
@@ -50,7 +59,11 @@ workflows:
           ./scripts/build_runner.sh insta_blocks clean
           ./scripts/build_runner.sh insta_blocks
           
-          cd packages/env && fvm dart run build_runner build --delete-conflicting-outputs && cd ../..
+          # Env package එක සඳහා සැබෑ .env ගොනුව උපයෝගී කරගෙන කේත ජනනය කිරීම
+          cd packages/env
+          fvm dart run build_runner clean
+          fvm dart run build_runner build --delete-conflicting-outputs
+          cd ../..
           
           fvm dart run build_runner clean
           fvm dart run build_runner build --delete-conflicting-outputs
