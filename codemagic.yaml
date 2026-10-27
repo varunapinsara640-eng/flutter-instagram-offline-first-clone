@@ -33,6 +33,10 @@ workflows:
       - name: Setup Environment Variables
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
+          
+          # Base64 පෙළ නැවතත් සැබෑ මුල් keystore (.jks) ගොනුව බවට පරිවර්තනය කර ආරක්ෂිතව සුරැකීම
+          echo "$ANDROID_KEYSTORE_PATH" | base64 --decode > /tmp/upload-keystore.jks
+          
           cd packages/env
           
           # Envied පැකේජයට අවශ්‍ය .env.dev ගොනුව සෑදීම
@@ -90,6 +94,10 @@ workflows:
       - name: Build Android APK (Release Mode)
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
+          
+          # Gradle වලට keystore පිහිටීම හඳුන්වා දීමට පරිසර විචල්‍යය තාවකාලිකව යාවත්කාලීන කිරීම
+          export ANDROID_KEYSTORE_PATH="/tmp/upload-keystore.jks"
+          
           fvm flutter build apk --release --flavor production -t lib/main_production.dart
           
     artifacts:
