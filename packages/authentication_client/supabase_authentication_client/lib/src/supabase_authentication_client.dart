@@ -60,32 +60,18 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
     }
   }
 
+  /// 🌐 බ්‍රවුසර් (Chrome) එක හරහා පිටතින් ලොග් වන නව ගූගල් ලොගින් ශ්‍රිතය (Method)
   @override
   Future<void> logInWithGoogle() async {
     try {
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        throw const LogInWithGoogleCanceled(
-          'Sign in with Google canceled. No user found!',
-        );
-      }
-      final googleAuth = await googleUser.authentication;
-      final accessToken = googleAuth.accessToken;
-      final idToken = googleAuth.idToken;
-      if (accessToken == null) {
-        throw const LogInWithGoogleFailure('No Access Token found.');
-      }
-      if (idToken == null) {
-        throw const LogInWithGoogleFailure('No ID Token found.');
-      }
-
-      await _powerSyncRepository.supabase.auth.signInWithIdToken(
-        provider: supabase.OAuthProvider.google,
-        idToken: idToken,
-        accessToken: accessToken,
+      // 🚀 සෘජුවම බ්‍රවුසර් එක ඕපන් කර සත්‍යාපනය කර, පසුව auto ඇප් එකට හැරී ඒමට 
+      // ඔයාගේ ඇප් එකේ සකසා ඇති නිල Callback ලින්ක් එක redirectTo එකට ලබා දී ඇත.
+      await _powerSyncRepository.supabase.auth.signInWithOAuth(
+        supabase.OAuthProvider.google,
+        redirectTo: kIsWeb
+            ? null
+            : 'io.supabase.flutterquickstart://login-callback/',
       );
-    } on LogInWithGoogleCanceled {
-      rethrow;
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(LogInWithGoogleFailure(error), stackTrace);
     }
