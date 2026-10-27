@@ -4,10 +4,11 @@ import 'package:authentication_client/authentication_client.dart';
 /// ලොගින් පියවර බයිපාස් (bypass) කර කෙලින්ම ඇතුල් වීම සඳහා සාදන ලද Dummy Authentication Client.
 class DummyAuthenticationClient implements AuthenticationClient {
   
+  // Named parameters වෙනුවට positional arguments විදිහට values කෙලින්ම ලබා දී ඇත
   static const _dummyUser = AuthenticationUser(
-    id: 'dummy-user-id-12345',
-    email: 'dummy.developer@example.com',
-    name: 'Varuna Pinsara',
+    'dummy-user-id-12345',
+    'dummy.developer@example.com',
+    'Varuna Pinsara',
   );
 
   final _userStreamController = StreamController<AuthenticationUser>.broadcast();
