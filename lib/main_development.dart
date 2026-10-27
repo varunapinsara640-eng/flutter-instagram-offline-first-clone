@@ -1,3 +1,4 @@
+import 'package:authentication_client/authentication_client.dart';
 import 'package:chats_repository/chats_repository.dart';
 import 'package:database_client/database_client.dart';
 import 'package:env/env.dart';
@@ -11,10 +12,9 @@ import 'package:posts_repository/posts_repository.dart';
 import 'package:search_repository/search_repository.dart';
 import 'package:shared/shared.dart';
 import 'package:stories_repository/stories_repository.dart';
-// 1. සැබෑ Supabase Authentication Client එක නැවත import කරන ලදී
 import 'package:supabase_authentication_client/supabase_authentication_client.dart'; 
 import 'package:token_storage/token_storage.dart';
-import 'package:user_repository/user_repository.dart';
+import 'package5/user_repository.dart';
 
 void main() {
   bootstrap(appFlavor: AppFlavor.development(), (
@@ -32,16 +32,12 @@ void main() {
     );
 
     final tokenStorage = InMemoryTokenStorage();
-
     final appFlavor = AppFlavor.development();
-    final iosClientId = appFlavor.getEnv(Env.iOSClientId);
-    final webClientId = appFlavor.getEnv(Env.webClientId);
     final googleSignIn = GoogleSignIn(
-      clientId: iosClientId,
-      serverClientId: webClientId,
+      clientId: appFlavor.getEnv(Env.iOSClientId),
+      serverClientId: appFlavor.getEnv(Env.webClientId),
     );
 
-    // 2. DummyClient එක වෙනුවට සැබෑ SupabaseAuthenticationClient එක මෙතනට නැවත ලබා දෙන ලදී
     final authenticationClient = SupabaseAuthenticationClient(
       powerSyncRepository: powerSyncRepository,
       tokenStorage: tokenStorage,
@@ -57,32 +53,31 @@ void main() {
     );
 
     final storiesStorage = StoriesStorage(storage: persistentStorage);
-
     final userRepository = UserRepository(
       databaseClient: databaseClient,
       authenticationClient: authenticationClient,
     );
 
-    final searchRepository = SearchRepository(databaseClient: databaseClient);
-
-    final postsRepository = PostsRepository(databaseClient: databaseClient);
-
-    final chatsRepository = ChatsRepository(databaseClient: databaseClient);
-
-    final storiesRepository = StoriesRepository(
-      databaseClient: databaseClient,
-      storage: storiesStorage,
-    );
-
     return App(
       userRepository: userRepository,
-      postsRepository: postsRepository,
-      chatsRepository: chatsRepository,
-      storiesRepository: storiesRepository,
-      searchRepository: searchRepository,
+      postsRepository: PostsRepository(databaseClient: databaseClient),
+      chatsRepository: ChatsRepository(databaseClient: databaseClient),
+      storiesRepository: StoriesRepository(
+        databaseClient: databaseClient,
+        storage: storiesStorage,
+      ),
+      searchRepository: SearchRepository(databaseClient: databaseClient),
       notificationsRepository: notificationsRepository,
       firebaseRemoteConfigRepository: firebaseRemoteConfigRepository,
-      user: await userRepository.user.first,
+      user: const AuthenticationUser(
+        id: 'dummy-user-id-12345',
+        email: 'storm.user@example.com',
+        fullName: 'Storm Tester',
+        username: 'storm_tester',
+        avatarUrl: 'https://unsplash.com',
+        pushToken: 'dummy-token-abc-123',
+        isNewUser: false,
+      ),
     );
   });
 }
