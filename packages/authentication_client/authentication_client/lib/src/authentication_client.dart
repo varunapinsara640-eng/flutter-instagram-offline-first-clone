@@ -173,6 +173,15 @@ abstract class AuthenticationClient {
   /// Throws a [LogInWithGithubFailure] if an exception occurs.
   Future<void> logInWithGithub();
 
+  /// දුරකථන අංකයට OTP කේතයක් (SMS) යැවීම සඳහා වන නව ශ්‍රිතය (Method)
+  Future<void> logInWithPhone({required String phoneNumber});
+
+  /// ලැබුණු OTP කේතය පරීක්ෂා කර සත්‍යාපනය කිරීම සඳහා වන නව ශ්‍රිතය (Method)
+  Future<void> verifyOTP({
+    required String phoneNumber,
+    required String token,
+  });
+
   /// Signs up with the provided [email] and [password].
   ///
   /// Throws a [SignUpWithPasswordFailure] if an exception occurs.
