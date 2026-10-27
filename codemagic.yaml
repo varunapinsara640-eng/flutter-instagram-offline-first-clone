@@ -33,16 +33,30 @@ workflows:
       - name: Setup Environment Variables
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
-          # Codemagic Dashboard එකෙන් ලබාදුන් සැබෑ දත්ත 7ම ඇප් එකේ .env ගොනුවට නිවැරදිව සම්බන්ධ කිරීම
           cd packages/env
-          echo "SUPABASE_URL=$SUPABASE_URL" > .env
-          echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
-          echo "POWERSYNC_URL=$POWERSYNC_URL" >> .env
-          echo "GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> .env
-          echo "FCM_SERVER_KEY=$FCM_SERVER_KEY" >> .env
-          echo "FIREBASE_SERVICE_ACCOUNT=$FIREBASE_SERVICE_ACCOUNT" >> .env
-          echo "WEB_CLIENT_ID=$WEB_CLIENT_ID" >> .env
-          echo "IOS_CLIENT_ID=$IOS_CLIENT_ID" >> .env
+          
+          # Envied පැකේජයට අවශ්‍ය .env.dev ගොනුව සෑදීම
+          cat <<EOF > .env.dev
+          SUPABASE_URL=$SUPABASE_URL
+          SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+          POWERSYNC_URL=$POWERSYNC_URL
+          GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+          FCM_SERVER_KEY=$FCM_SERVER_KEY
+          IOS_CLIENT_ID=$IOS_CLIENT_ID
+          WEB_CLIENT_ID=$WEB_CLIENT_ID
+          EOF
+          
+          # Envied පැකේජයට අවශ්‍ය .env.prod ගොනුව සෑදීම
+          cat <<EOF > .env.prod
+          SUPABASE_URL=$SUPABASE_URL
+          SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+          POWERSYNC_URL=$POWERSYNC_URL
+          GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+          FCM_SERVER_KEY=$FCM_SERVER_KEY
+          IOS_CLIENT_ID=$IOS_CLIENT_ID
+          WEB_CLIENT_ID=$WEB_CLIENT_ID
+          EOF
+          
           cd ../..
           
       - name: Install All Multi-Package Dependencies
@@ -59,7 +73,7 @@ workflows:
           ./scripts/build_runner.sh insta_blocks clean
           ./scripts/build_runner.sh insta_blocks
           
-          # Env package එක සඳහා සැබෑ .env ගොනුව උපයෝගී කරගෙන කේත ජනනය කිරීම
+          # Env package එක සඳහා සැබෑ .env.dev සහ .env.prod ගොනු උපයෝගී කරගෙන කේත ජනනය කිරීම
           cd packages/env
           fvm dart run build_runner clean
           fvm dart run build_runner build --delete-conflicting-outputs
