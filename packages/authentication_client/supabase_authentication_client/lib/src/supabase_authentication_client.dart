@@ -14,9 +14,9 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
     required PowerSyncRepository powerSyncRepository,
     required TokenStorage tokenStorage,
     required GoogleSignIn googleSignIn,
-  }) : _tokenStorage = tokenStorage,
-       _powerSyncRepository = powerSyncRepository,
-       _googleSignIn = googleSignIn {
+  })  : _tokenStorage = tokenStorage,
+        _powerSyncRepository = powerSyncRepository,
+        _googleSignIn = googleSignIn {
     user.listen(_onUserChanged);
   }
 
@@ -47,7 +47,7 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
     try {
       if (email == null && phone == null) {
         throw const LogInWithPasswordCanceled(
-          'You must provide either an email, phone number.',
+          'You must provide either an email or phone number.',
         );
       }
       await _powerSyncRepository.supabase.auth.signInWithPassword(
@@ -81,12 +81,12 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
       if (accessToken == null) {
         throw const LogInWithGoogleFailure('No Access Token found.');
       }
-      if (idToken == null) {
+      if idToken == null) {
         throw const LogInWithGoogleFailure('No ID Token found.');
       }
 
       await _powerSyncRepository.supabase.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
+        provider: supabase.OAuthProvider.google,
         idToken: idToken,
         accessToken: accessToken,
       );
@@ -105,7 +105,7 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
   Future<void> logInWithGithub() async {
     try {
       await _powerSyncRepository.supabase.auth.signInWithOAuth(
-        OAuthProvider.github,
+        supabase.OAuthProvider.github,
         redirectTo: kIsWeb
             ? null
             : 'io.supabase.flutterquickstart://login-callback/',
@@ -114,6 +114,37 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
       rethrow;
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(LogInWithGithubFailure(error), stackTrace);
+    }
+  }
+
+  /// දුරකථන අංකයට OTP කේතයක් (SMS) යැවීම සඳහා වන Method එක
+  @override
+  Future<void> logInWithPhone({required String phoneNumber}) async {
+    try {
+      // Supabase Phone Auth හරහා OTP එකක් අදාළ දුරකථන අංකයට යැවීම
+      await _powerSyncRepository.supabase.auth.signInWithOtp(
+        phone: phoneNumber,
+      );
+    } catch (error, stackTrace) {
+      Error.throwWithStackTrace(LogInWithPhoneFailure(error), stackTrace);
+    }
+  }
+
+  /// ලැබුණු OTP කේතය පරීක්ෂා කර සත්‍යාපනය කිරීම සඳහා වන Method එක
+  @override
+  Future<void> verifyOTP({
+    required String phoneNumber,
+    required String token,
+  }) async {
+    try {
+      // Supabase හරහා SMS එකෙන් ලැබුණු OTP එක verify කිරීම
+      await _powerSyncRepository.supabase.auth.verifyOTP(
+        phone: phoneNumber,
+        token: token,
+        type: supabase.OtpType.sms,
+      );
+    } catch (error, stackTrace) {
+      Error.throwWithStackTrace(VerifyOTPFailure(error), stackTrace);
     }
   }
 
@@ -141,7 +172,7 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
         data: data,
         emailRedirectTo: kIsWeb
             ? null
-            : 'io._powerSyncRepository.supabase.flutterquickstart://login-callback/',
+            : 'io.supabase.flutterquickstart://login-callback/',
       );
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(SignUpWithPasswordFailure(error), stackTrace);
