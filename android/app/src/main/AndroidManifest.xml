@@ -1,11 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://android.com"
 package="com.emilzulufov.flutter_instagram_offline_first_clone">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE>" />
+    <!-- අකුරු වැරදීම (Typo) සම්පූර්ණයෙන්ම නිවැරදි කරන ලදී -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -36,7 +37,7 @@ package="com.emilzulufov.flutter_instagram_offline_first_clone">
         android:requestLegacyExternalStorage="true">
 
         <meta-data android:name="com.posthog.posthog.API_KEY" android:value="phc_hVM6VI5ByYAcnBjDQv6SB6ObOKuzx1b2n7jBLk3Ue9L" />
-        <meta-data android:name="com.posthog.posthog.POSTHOG_HOST" android:value="https://us.i.posthog.com" />
+        <meta-data android:name="com.posthog.posthog.POSTHOG_HOST" android:value="https://posthog.com" />
         <meta-data android:name="com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="true" />
         <meta-data android:name="com.posthog.posthog.DEBUG" android:value="true" />
 
@@ -65,15 +66,17 @@ package="com.emilzulufov.flutter_instagram_offline_first_clone">
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            
+            <!-- ⚡ Chrome එකෙන් ලොග් වූ පසු ස්වයංක්‍රීයවම නැවත ඇප් එක ඕපන් කරන Deep Link කේතය -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
                 android:scheme="io.supabase.flutterquickstart"
                 android:host="login-callback" />
             </intent-filter>
+            
             <intent-filter> 
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" /> 
                 <category android:name="android.intent.category.DEFAULT" /> 
