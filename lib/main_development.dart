@@ -1,3 +1,4 @@
+import 'package:authentication_client/authentication_client.dart'; // DummyAuthenticationClient එක සඳහා නව import එක
 import 'package:chats_repository/chats_repository.dart';
 import 'package:database_client/database_client.dart';
 import 'package:env/env.dart';
@@ -11,7 +12,8 @@ import 'package:posts_repository/posts_repository.dart';
 import 'package:search_repository/search_repository.dart';
 import 'package:shared/shared.dart';
 import 'package:stories_repository/stories_repository.dart';
-import 'package:supabase_authentication_client/supabase_authentication_client.dart';
+// සැබෑ Supabase Authentication Client එක අවශ්‍ය නොවන නිසා මෙය ඉවත් කළ හැක
+// import 'package:supabase_authentication_client/supabase_authentication_client.dart'; 
 import 'package:token_storage/token_storage.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -40,11 +42,8 @@ void main() {
       serverClientId: webClientId,
     );
 
-    final authenticationClient = SupabaseAuthenticationClient(
-      powerSyncRepository: powerSyncRepository,
-      tokenStorage: tokenStorage,
-      googleSignIn: googleSignIn,
-    );
+    // 1. SupabaseAuthenticationClient එක වෙනුවට අපේ Dummy Client එක මෙතනට ආදේශ කලා
+    final authenticationClient = DummyAuthenticationClient();
 
     final databaseClient = PowerSyncDatabaseClient(
       powerSyncRepository: powerSyncRepository,
