@@ -1,0 +1,91 @@
+import 'dart:async';
+import 'package:authentication_client/src/models/models.dart';
+// NOTE: ඔයාගේ ඇප් එකේ AuthenticationException ක්ලාස් එක තියෙන ෆයිල් එක මෙතනට import කරන්න.
+// import 'authentication_exception.dart'; 
+
+/// ලොගින් පියවර බයිපාස් (bypass) කර කෙලින්ම ඇතුල් වීම සඳහා සාදන ලද Dummy Authentication Client.
+class DummyAuthenticationClient implements AuthenticationClient {
+  
+  // 1. ඇප් එක ඇතුලට කෙලින්ම ලොග් වෙන්න ඕනේ dummy පරිශීලකයාගේ විස්තර මෙතනින් වෙනස් කරගන්න පුළුවන්.
+  static const _dummyUser = AuthenticationUser(
+    id: 'dummy-user-id-12345',
+    email: 'dummy.developer@example.com',
+    name: 'Varuna Pinsara', // ඔයාට කැමති නමක් මෙතනට දෙන්න
+  );
+
+  // 2. ඇප් එක ස්ටාර්ට් වෙනකොටම dummy user ව emit කරන්න StreamController එකක් සාදයි.
+  final _userStreamController = StreamController<AuthenticationUser>.broadcast();
+
+  DummyAuthenticationClient() {
+    // ඇප් එක ආරම්භයේදීම dummy user ව stream එකට එකතු කරයි.
+    _userStreamController.add(_dummyUser);
+  }
+
+  @override
+  Stream<AuthenticationUser> get user {
+    // කවුරුහරි මේ stream එකට සබ්ස්ක්‍රයිබ් වුන ගමන්ම dummy user ව මුලින්ම යවනවා.
+    Timer.run(() => _userStreamController.add(_dummyUser));
+    return _userStreamController.stream;
+  }
+
+  @override
+  Future<void> logInWithPassword({
+    required String password,
+    String? email,
+    String? phone,
+  }) async {
+    // ලොගින් බටන් එක එබූ සැනින් dummy user ව ඇතුලත් කරයි.
+    _userStreamController.add(_dummyUser);
+  }
+
+  @override
+  Future<void> logInWithGoogle() async {
+    _userStreamController.add(_dummyUser);
+  }
+
+  @override
+  Future<void> logInWithGithub() async {
+    _userStreamController.add(_dummyUser);
+  }
+
+  @override
+  Future<void> signUpWithPassword({
+    required String password,
+    required String fullName,
+    required String username,
+    String? avatarUrl,
+    String? email,
+    String? phone,
+    String? pushToken,
+  }) async {
+    _userStreamController.add(_dummyUser);
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail({
+    required String email,
+    String? redirectTo,
+  }) async {
+    // Password reset කිරීමට අවශ්‍ය නැති නිසා හිස්ව තබන්න.
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String token,
+    required String email,
+    required String newPassword,
+  }) async {
+    // හිස්ව තබන්න.
+  }
+
+  @override
+  Future<void> logOut() async {
+    // ලොග් අවුට් වීමේදී anonymous (හිස්) පරිශීලකයෙක් ලබා දෙයි.
+    _userStreamController.add(AuthenticationUser.anonymous);
+  }
+
+  /// StreamController එක ක්ලෝස් කිරීමට (தேவைப்பட்டால்)
+  void dispose() {
+    _userStreamController.close();
+  }
+}
