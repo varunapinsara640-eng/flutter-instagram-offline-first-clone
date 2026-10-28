@@ -52,9 +52,7 @@ dependencies:
     path: packages/instagram_blocks_ui
   intl: ^0.20.2
   inview_notifier_list:
-    git:
-      url: https://github.com
-      ref: master
+    git: https://github.com/Gambley1/inview_notifier_list
   json_annotation: ^4.9.0
   lottie: ^3.1.2
   notifications_repository:
@@ -85,8 +83,8 @@ dependencies:
   story_view: ^0.16.5
   styled_text:
     git:
-      url: https://github.com
-      ref: master
+      ref: 91272c4779123570a642b19f96214adef2e850b4
+      url: https://github.com/Maatteogekko/styled_text_package
       path: styled_text
   supabase_authentication_client:
     path: packages/authentication_client/supabase_authentication_client
