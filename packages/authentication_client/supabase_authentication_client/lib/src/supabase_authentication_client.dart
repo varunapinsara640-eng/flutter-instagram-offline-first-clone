@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:authentication_client/authentication_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,6 +24,10 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
   final PowerSyncRepository _powerSyncRepository;
   final GoogleSignIn _googleSignIn;
 
+  /// Stream of [AuthenticationUser] which will emit the current user when
+  /// the authentication state changes.
+  ///
+  /// Emits [AuthenticationUser.anonymous] if the user is not authenticated.
   @override
   Stream<AuthenticationUser> get user {
     return _powerSyncRepository.authStateChanges().map((state) {
@@ -60,28 +62,50 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
     }
   }
 
-  /// 🌐 බ්‍රවුසර් (Chrome) එක හරහා පිටතින් ලොග් වන නව ගූගල් ලොගින් ශ්‍රිතය (Method)
+  /// Starts the Sign In with Google Flow.
+  ///
+  /// Throws a [LogInWithGoogleCanceled] if the flow is canceled by the user.
+  /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   @override
   Future<void> logInWithGoogle() async {
     try {
-      // 🚀 සෘජුවම බ්‍රවුසර් එක ඕපන් කර සත්‍යාපනය කර, පසුව auto ඇප් එකට හැරී ඒමට 
-      // ඔයාගේ ඇප් එකේ සකසා ඇති නිල Callback ලින්ක් එක redirectTo එකට ලබා දී ඇත.
-      await _powerSyncRepository.supabase.auth.signInWithOAuth(
-        supabase.OAuthProvider.google,
-        redirectTo: kIsWeb
-            ? null
-            : 'io.supabase.flutterquickstart://login-callback/',
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        throw const LogInWithGoogleCanceled(
+          'Sign in with Google canceled. No user found!',
+        );
+      }
+      final googleAuth = await googleUser.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
+      if (accessToken == null) {
+        throw const LogInWithGoogleFailure('No Access Token found.');
+      }
+      if (idToken == null) {
+        throw const LogInWithGoogleFailure('No ID Token found.');
+      }
+
+      await _powerSyncRepository.supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
       );
+    } on LogInWithGoogleCanceled {
+      rethrow;
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(LogInWithGoogleFailure(error), stackTrace);
     }
   }
 
+  /// Starts the Sign In with Github Flow.
+  ///
+  /// Throws a [LogInWithGithubCanceled] if the flow is canceled by the user.
+  /// Throws a [LogInWithGithubFailure] if an exception occurs.
   @override
   Future<void> logInWithGithub() async {
     try {
       await _powerSyncRepository.supabase.auth.signInWithOAuth(
-        supabase.OAuthProvider.github,
+        OAuthProvider.github,
         redirectTo: kIsWeb
             ? null
             : 'io.supabase.flutterquickstart://login-callback/',
@@ -90,41 +114,6 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
       rethrow;
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(LogInWithGithubFailure(error), stackTrace);
-    }
-  }
-
-  /// 📲 Ideamart සමඟ සම්බන්ධ වන දුරකථන අංක ලොගින් ශ්‍රිතය (Method)
-  @override
-  Future<void> logInWithPhone({required String phoneNumber}) async {
-    try {
-      // Supabase Edge Function එකක් හරහා ආරක්ෂිතව Ideamart API එකට Request එක යැවීම
-      await _powerSyncRepository.supabase.functions.invoke(
-        'ideamart-otp-send',
-        body: {'phone': phoneNumber},
-      );
-    } catch (error, stackTrace) {
-      Error.throwWithStackTrace(LogInWithPasswordFailure(error), stackTrace);
-    }
-  }
-
-  /// 🔑 ලැබුණු OTP කේතය පරීක්ෂා කර ඇතුළු වීමේ ශ්‍රිතය (Method)
-  @override
-  Future<void> verifyOTP({
-    required String phoneNumber,
-    required String token,
-  }) async {
-    try {
-      // Ideamart එකෙන් ආපු OTP එක පරීක්ෂා කිරීමට Edge Function එක කැඳවීම
-      final response = await _powerSyncRepository.supabase.functions.invoke(
-        'ideamart-otp-verify',
-        body: {'phone': phoneNumber, 'otp': token},
-      );
-
-      // ලැබෙන Supabase Custom Token එකෙන් ඇප් එක ඇතුලට ලොග් වීම
-      final sessionToken = response.data['session_token'] as String;
-      await _powerSyncRepository.supabase.auth.setSession(sessionToken);
-    } catch (error, stackTrace) {
-      Error.throwWithStackTrace(LogInWithPasswordFailure(error), stackTrace);
     }
   }
 
@@ -150,6 +139,9 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
         phone: phone,
         password: password,
         data: data,
+        emailRedirectTo: kIsWeb
+            ? null
+            : 'io._powerSyncRepository.supabase.flutterquickstart://login-callback/',
       );
     } catch (error, stackTrace) {
       Error.throwWithStackTrace(SignUpWithPasswordFailure(error), stackTrace);
@@ -191,6 +183,10 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
     }
   }
 
+  /// Signs out the current user which will emit
+  /// [AuthenticationUser.anonymous] from the [user] Stream.
+  ///
+  /// Throws a [LogOutFailure] if an exception occurs.
   @override
   Future<void> logOut() async {
     try {
@@ -202,6 +198,7 @@ class SupabaseAuthenticationClient implements AuthenticationClient {
     }
   }
 
+  /// Updates the user token in [TokenStorage] if the user is authenticated.
   Future<void> _onUserChanged(AuthenticationUser user) async {
     if (!user.isAnonymous) {
       await _tokenStorage.saveToken(user.id);
