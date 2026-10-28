@@ -14,7 +14,7 @@ import 'package:shared/shared.dart';
 import 'package:stories_repository/stories_repository.dart';
 import 'package:supabase_authentication_client/supabase_authentication_client.dart'; 
 import 'package:token_storage/token_storage.dart';
-import 'package5/user_repository.dart';
+import 'package:user_repository/user_repository.dart'; // 17 වැනි පේළිය නිවැරදි කරන ලදී
 
 void main() {
   bootstrap(appFlavor: AppFlavor.development(), (
@@ -69,14 +69,14 @@ void main() {
       searchRepository: SearchRepository(databaseClient: databaseClient),
       notificationsRepository: notificationsRepository,
       firebaseRemoteConfigRepository: firebaseRemoteConfigRepository,
-      user: const AuthenticationUser(
+      // මෙහි ඇති User ගැළපීමේ ගැටලුවද නිවැරදි කර ඇත:
+      user: User(
         id: 'dummy-user-id-12345',
         email: 'storm.user@example.com',
         fullName: 'Storm Tester',
         username: 'storm_tester',
         avatarUrl: 'https://unsplash.com',
         pushToken: 'dummy-token-abc-123',
-        isNewUser: false,
       ),
     );
   });
