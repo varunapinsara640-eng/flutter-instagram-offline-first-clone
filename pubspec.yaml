@@ -52,7 +52,7 @@ dependencies:
     path: packages/instagram_blocks_ui
   intl: ^0.20.2
   inview_notifier_list:
-    git: https://github.com/Gambley1/inview_notifier_list
+    git: https://github.com
   json_annotation: ^4.9.0
   lottie: ^3.1.2
   notifications_repository:
@@ -84,7 +84,7 @@ dependencies:
   styled_text:
     git:
       ref: 91272c4779123570a642b19f96214adef2e850b4
-      url: https://github.com/Maatteogekko/styled_text_package
+      url: https://github.com
       path: styled_text
   supabase_authentication_client:
     path: packages/authentication_client/supabase_authentication_client
@@ -100,8 +100,8 @@ dependencies:
 dependency_overrides:
   fading_edge_scrollview: ^4.1.1
   sqlite3: ^2.4.3+1
-  # Codemagic build compiler error එක විසඳීමට powersync_core version එක 1.7.1 ලෙස override කරන ලදී.
-  powersync_core: 1.7.1
+  # Codemagic compiler crash එක සම්පූර්ණයෙන්ම විසඳීමට powersync පැකේජ් එක මෙලෙස override කරන ලදී.
+  powersync: 1.7.1
 
 dev_dependencies:
   bloc_test: ^10.0.0
