@@ -101,7 +101,7 @@ dependency_overrides:
   fading_edge_scrollview: ^4.1.1
   sqlite3: ^2.4.3+1
   # Codemagic compiler crash එක සම්පූර්ණයෙන්ම විසඳීමට powersync පැකේජ් එක මෙලෙස override කරන ලදී.
-  powersync: 1.7.1
+  powersync_core: 1.4.0
 
 dev_dependencies:
   bloc_test: ^10.0.0
