@@ -14,7 +14,7 @@ import 'package:shared/shared.dart';
 import 'package:stories_repository/stories_repository.dart';
 import 'package:supabase_authentication_client/supabase_authentication_client.dart'; 
 import 'package:token_storage/token_storage.dart';
-import 'package:user_repository/user_repository.dart'; // 17 වැනි පේළිය නිවැරදි කරන ලදී
+import 'package:user_repository/user_repository.dart'; 
 
 void main() {
   bootstrap(appFlavor: AppFlavor.development(), (
@@ -33,9 +33,16 @@ void main() {
 
     final tokenStorage = InMemoryTokenStorage();
     final appFlavor = AppFlavor.development();
+
+    // Google Sign In එක Release Build එකේදී සහ Supabase සමඟ ගැටළු රහිතව 
+    // වැඩ කිරීමට Scopes සහ නිවැරදි Client IDs මෙලෙස යාවත්කාලීන කරන ලදී.
     final googleSignIn = GoogleSignIn(
       clientId: appFlavor.getEnv(Env.iOSClientId),
       serverClientId: appFlavor.getEnv(Env.webClientId),
+      scopes: [
+        'email',
+        'profile',
+      ],
     );
 
     final authenticationClient = SupabaseAuthenticationClient(
@@ -69,7 +76,6 @@ void main() {
       searchRepository: SearchRepository(databaseClient: databaseClient),
       notificationsRepository: notificationsRepository,
       firebaseRemoteConfigRepository: firebaseRemoteConfigRepository,
-      // මෙහි ඇති User ගැළපීමේ ගැටලුවද නිවැරදි කර ඇත:
       user: User(
         id: 'dummy-user-id-12345',
         email: 'storm.user@example.com',
