@@ -5,7 +5,7 @@ package="com.emilzulufov.flutter_instagram_offline_first_clone">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE>" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -65,15 +65,18 @@ package="com.emilzulufov.flutter_instagram_offline_first_clone">
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <intent-filter>
+
+            <!-- Supabase Redirect එක අල්ලන්න මෙන්න මේ අලුත් intent-filter එක භාවිතා කරන්න -->
+            <intent-filter android:label="supabase_auth_callback">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
-                <data
-                android:scheme="io.supabase.flutterquickstart"
-                android:host="login-callback" />
+                
+                <data android:scheme="com.emilzulufov.flutter_instagram_offline_first_clone" android:host="login-callback" />
+                <data android:scheme="com.emilzulufov.flutter_instagram_offline_first_clone.dev" android:host="login-callback" />
+                <data android:scheme="com.emilzulufov.flutter_instagram_offline_first_clone.stg" android:host="login-callback" />
             </intent-filter>
+
             <intent-filter> 
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" /> 
                 <category android:name="android.intent.category.DEFAULT" /> 
