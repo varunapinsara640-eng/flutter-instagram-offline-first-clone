@@ -24,10 +24,10 @@ class _SignUpFormState extends State<SignUpForm> {
         if (state.submissionStatus.isError) {
           openSnackbar(
             SnackbarMessage.error(
-              title:
-                  signupSubmissionStatusMessage[state.submissionStatus]!.title,
-              description: signupSubmissionStatusMessage[state.submissionStatus]
-                  ?.description,
+              title: signupSubmissionStatusMessage[state.submissionStatus]!.title,
+              // මෙතන state.errorMessage මඟින් සැබෑම error එක පෙන්වයි
+              description: state.errorMessage ?? 
+                  signupSubmissionStatusMessage[state.submissionStatus]?.description,
             ),
             clearIfQueue: true,
           );
