@@ -25,9 +25,8 @@ class _SignUpFormState extends State<SignUpForm> {
           openSnackbar(
             SnackbarMessage.error(
               title: signupSubmissionStatusMessage[state.submissionStatus]!.title,
-              // මෙතන state.errorMessage මඟින් සැබෑම error එක පෙන්වයි
-              description: state.errorMessage ?? 
-                  signupSubmissionStatusMessage[state.submissionStatus]?.description,
+              // Codemagic එකේ build error එක නැති කිරීමට 'state.errorMessage' අයින් කර නිවැරදි කරන ලදී.
+              description: signupSubmissionStatusMessage[state.submissionStatus]?.description,
             ),
             clearIfQueue: true,
           );
