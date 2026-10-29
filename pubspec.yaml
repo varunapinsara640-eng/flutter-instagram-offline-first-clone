@@ -100,8 +100,8 @@ dependencies:
 dependency_overrides:
   fading_edge_scrollview: ^4.1.1
   sqlite3: ^2.4.3+1
-  # Codemagic build compiler error එක විසඳීමට powersync_core version එක මෙලෙස override කරන ලදී
-  powersync_core: 1.7.2
+  # Codemagic build compiler error එක විසඳීමට powersync_core version එක 1.7.1 ලෙස override කරන ලදී.
+  powersync_core: 1.7.1
 
 dev_dependencies:
   bloc_test: ^10.0.0
