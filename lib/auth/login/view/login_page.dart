@@ -27,8 +27,8 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Wooble Deep Cyberpunk Dark Background
-      backgroundColor: const Color(0_xFF0B0E14),
+      // Wooble Deep Cyberpunk Dark Background - Fixed underscore issue
+      backgroundColor: const Color(0xFF0B0E14),
       body: SafeArea(
         child: AppConstrainedScrollView(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xlg),
@@ -63,11 +63,11 @@ class LoginView extends StatelessWidget {
               ),
               const Gap.v(AppSpacing.xxlg),
 
-              // Neon Glowing Container Wrapper for Forms
+              // Neon Glowing Container Wrapper for Forms - Fixed underscore issue
               Container(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 decoration: BoxDecoration(
-                  color: const Color(0_xFF161B22),
+                  color: const Color(0xFF161B22),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: Colors.cyanAccent.withOpacity(0.3),
