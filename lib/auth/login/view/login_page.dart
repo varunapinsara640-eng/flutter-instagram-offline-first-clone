@@ -26,76 +26,152 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      releaseFocus: true,
-      resizeToAvoidBottomInset: true,
-      body: AppConstrainedScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xlg),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Gap.v(AppSpacing.xxxlg + AppSpacing.xxxlg),
-            const AppLogo(
-              height: AppSpacing.xxxlg,
-              fit: BoxFit.fitHeight,
-              width: double.infinity,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const LoginForm(),
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      bottom: AppSpacing.md,
-                      top: AppSpacing.xs,
+    return Scaffold(
+      // Wooble Deep Cyberpunk Dark Background
+      backgroundColor: const Color(0_xFF0B0E14),
+      body: SafeArea(
+        child: AppConstrainedScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xlg),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Gap.v(AppSpacing.xxxlg),
+              
+              // Wooble Header Style
+              Text(
+                'WOOBLE',
+                style: TextStyle(
+                  fontSize: 38,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 4,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      color: Colors.cyanAccent.withOpacity(0.8),
+                      blurRadius: 15,
                     ),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: ForgotPasswordButton(),
-                    ),
-                  ),
-                  const Align(child: SignInButton()),
-                  Row(
-                    children: <Widget>[
-                      const Expanded(
-                        child: AppDivider(
-                          endIndent: AppSpacing.sm,
-                          indent: AppSpacing.md,
-                          color: AppColors.white,
-                          height: 36,
-                        ),
-                      ),
-                      Text('OR', style: context.titleMedium),
-                      const Expanded(
-                        child: AppDivider(
-                          color: AppColors.white,
-                          indent: AppSpacing.sm,
-                          endIndent: AppSpacing.md,
-                          height: 36,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    child: AuthProviderSignInButton(
-                      provider: AuthProvider.google,
-                      onPressed: () =>
-                          context.read<LoginCubit>().loginWithGoogle(),
-                    ),
-                  ),
-                  Align(
-                    child: AuthProviderSignInButton(
-                      provider: AuthProvider.github,
-                      onPressed: () =>
-                          context.read<LoginCubit>().loginWithGithub(),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SignUpNewAccountButton(),
-          ],
+              const Text(
+                'Connect to the Cyberverse',
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 14,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const Gap.v(AppSpacing.xxlg),
+
+              // Neon Glowing Container Wrapper for Forms
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: const Color(0_xFF161B22),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.cyanAccent.withOpacity(0.3),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.cyanAccent.withOpacity(0.1),
+                      blurRadius: 20,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const LoginForm(),
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        bottom: AppSpacing.md,
+                        top: AppSpacing.xs,
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: ForgotPasswordButton(),
+                      ),
+                    ),
+                    const Align(child: SignInButton()),
+                    
+                    // Styled Neon Divider
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Divider(
+                            color: Colors.cyanAccent.withOpacity(0.2),
+                            thickness: 1,
+                            endIndent: AppSpacing.sm,
+                            indent: AppSpacing.md,
+                          ),
+                        ),
+                        Text(
+                          'OR', 
+                          style: context.titleMedium?.copyWith(
+                            color: Colors.white60,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.cyanAccent.withOpacity(0.2),
+                            thickness: 1,
+                            indent: AppSpacing.sm,
+                            endIndent: AppSpacing.md,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap.v(AppSpacing.sm),
+
+                    // Social Sign-In Buttons with Neon Accents
+                    Align(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.redAccent.withOpacity(0.1),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: AuthProviderSignInButton(
+                          provider: AuthProvider.google,
+                          onPressed: () =>
+                              context.read<LoginCubit>().loginWithGoogle(),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.purpleAccent.withOpacity(0.1),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: AuthProviderSignInButton(
+                          provider: AuthProvider.github,
+                          onPressed: () =>
+                              context.read<LoginCubit>().loginWithGithub(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap.v(AppSpacing.xlg),
+              const SignUpNewAccountButton(),
+            ],
+          ),
         ),
       ),
     );
