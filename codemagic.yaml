@@ -71,20 +71,27 @@ workflows:
       - name: Run Build Runner for Packages & Root
         script: |
           export PATH="$PATH":"$HOME/.pub-cache/bin"
+          
+          # 1. මුලින්ම සියලුම පැකේජවල පැරණි generated ෆයිල්ස් Clean කර ගන්න
           ./scripts/build_runner.sh shared clean
-          ./scripts/build_runner.sh shared
-          
           ./scripts/build_runner.sh insta_blocks clean
-          ./scripts/build_runner.sh insta_blocks
           
-          # Env package එක සඳහා සැබෑ .env.dev සහ .env.prod ගොනු උපයෝගී කරගෙන කේත ජනනය කිරීම
           cd packages/env
           fvm dart run build_runner clean
-          fvm dart run build_runner build --delete-conflicting-outputs
           cd ../..
           
           fvm dart run build_runner clean
+          
+          # 2. දැන් කේතයන් ජනනය (Build) කරන්න (පළමුව shared සහ insta_blocks)
+          ./scripts/build_runner.sh shared
+          ./scripts/build_runner.sh insta_blocks
+          
+          # 3. අවසානයට root එක සහ env පැකේජය build කරන්න (එවිට env.g.dart එක මැකී නොයයි)
           fvm dart run build_runner build --delete-conflicting-outputs
+          
+          cd packages/env
+          fvm dart run build_runner build --delete-conflicting-outputs
+          cd ../..
           
       - name: Generate Localizations
         script: |
