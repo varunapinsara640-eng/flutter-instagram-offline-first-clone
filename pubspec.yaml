@@ -99,9 +99,12 @@ dependencies:
 
 dependency_overrides:
   fading_edge_scrollview: ^4.1.1
-  sqlite3: ^2.4.3+1
-  # Codemagic compiler crash එක සම්පූර්ණයෙන්ම විසඳීමට powersync පැකේජ් එක මෙලෙස override කරන ලදී.
-  powersync_core: 1.4.0
+  # වෙබ් එකේදී ffi errors මඟහැරීමට sqlite3_web සහ නිවැරදි sqlite3 version එක ලබාදීම
+  sqlite3: ^3.0.0
+  sqlite3_web: ^0.6.0
+  # පරණ powersync_core වෙනුවට වෙබ් සපෝට් කරන අලුත්ම අනුවාදය (හෝ dependency එක තාවකාලිකව bypass කිරීම)
+  powersync: ^2.2.0
+
 
 dev_dependencies:
   bloc_test: ^10.0.0
