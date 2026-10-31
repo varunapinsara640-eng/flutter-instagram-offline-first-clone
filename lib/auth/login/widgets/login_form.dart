@@ -74,7 +74,8 @@ class _LoginFormState extends State<LoginForm> {
                   filled: true,
                   fillColor: const Color(0xFF0F141C),
                   prefixIcon: Icon(Icons.email_outlined, color: Colors.cyanAccent.withOpacity(0.6)),
-                  errorText: state.email.displayError != null ? 'Invalid email format' : null,
+                  // Fixed: Changed state.email.displayError to state.email.error
+                  errorText: state.email.error != null ? 'Invalid email format' : null,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.cyanAccent.withOpacity(0.3), width: 1.2),
@@ -130,7 +131,8 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     onPressed: () => setState(() => _isPasswordObscured = !_isPasswordObscured),
                   ),
-                  errorText: state.password.displayError != null ? 'Password cannot be empty' : null,
+                  // Fixed: Changed state.password.displayError to state.password.error
+                  errorText: state.password.error != null ? 'Password cannot be empty' : null,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.pinkAccent.withOpacity(0.3), width: 1.2),
